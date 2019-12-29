@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using BankSystem.BL;
 using BankSystem.BL.Controllers;
+using BankSystem.BL.Models;
 
 namespace BankSystem
 {
@@ -101,8 +102,17 @@ namespace BankSystem
                 int age = int.Parse(Console.ReadLine());
                 Console.WriteLine("Set passport");
                 string passport = Console.ReadLine();
+                Console.WriteLine("Choose your bank");
+                Bank bank = new Bank();
+                foreach (var item in bank.banks)
+                {
+                    Console.WriteLine(item.Value);
+                }
+
+                int bankId = int.Parse(Console.ReadLine());
                 userContoller.Messages += UserContoller_Message;
-                userContoller.CreateUser(name, surname, email, age, passport, password, login);
+
+                userContoller.CreateUser(name, surname, email, age, passport, password, login, bankId);
                 if (userContoller.IsSuccess)
                 {
                     MainMenu(userContoller);
@@ -232,6 +242,10 @@ namespace BankSystem
             Console.WriteLine($"User Name and Surname: {userContoller.CurrentUser.FullName}");
             Console.WriteLine($"Card number: {str1} {str2} {str3} {str4}");
             Console.WriteLine($"Money: {userContoller.CurrentUser.Money}");
+
+            Console.WriteLine($"System: {userContoller.CurrentUser.Card.BankSystem}");
+            Console.WriteLine($"Bank: {userContoller.CurrentUser.Card.Bank.Name}");
+
             if (userContoller.CurrentUser.Opertation !=null)
             {
                 foreach (var item in userContoller.CurrentUser.Opertation)

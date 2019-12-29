@@ -32,7 +32,6 @@ namespace BankSystem.BL
                 user.Card.CardNumber = GenerateCardCode();
 
 
-
                 user.Role = new Role(2);
                 Users.Add(user);
                 Save();
@@ -44,7 +43,7 @@ namespace BankSystem.BL
 
 
 
-        public User CreateUser(string name, string surname, string email, int age, string passport, string password,string login)
+        public User CreateUser(string name, string surname, string email, int age, string passport, string password,string login, int bankId)
         {
             var check = Users.FirstOrDefault(x=>x.Login == login);
             if (check ==null)
@@ -60,15 +59,21 @@ namespace BankSystem.BL
                     User usersCardNumber = new User
                     {
                         Card = new Card()
+                        {
+                            Bank = new Bank(bankId),
+                        }
                     };
                     usersCardNumber = Users.FirstOrDefault(x => x.Card.CardNumber == cardNumber);
                     if (usersCardNumber == null)
                     {
+                        Random random = new Random();
+                       
                         User user = new User(name, surname, age, passport, email, password, login)
                         {
                             Role = new Role(2),
                             Opertation = new List<Opertation>(),
-                            Card = new Card { CardNumber = cardNumber, UserName = email, IsBlocked = false},
+                            Card = new Card(random.Next(1,3)) { CardNumber = cardNumber, UserName = email, IsBlocked = false, Bank = new Bank(bankId)},
+                            
                         };
 
                         Users.Add(user);
